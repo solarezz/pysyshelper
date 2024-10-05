@@ -2,6 +2,7 @@ import asyncio
 from aiogram import Router, F
 from aiogram.enums import ParseMode
 from aiogram.types import Message, KeyboardButton, ReplyKeyboardMarkup
+from keyboards import all_keyboards
 
 dhcp = Router()
 
@@ -9,26 +10,11 @@ dhcp = Router()
 
 @dhcp.message(F.text == "DHCP")
 async def dhcp_navigation(message: Message):
-    kb = [
-        [
-            KeyboardButton(text='isc-dhcp-server'),
-            KeyboardButton(text='MT DHCP'),
-            KeyboardButton(text='Back'),
-        ]
-    ]
-    markup = ReplyKeyboardMarkup(keyboard=kb, resize_keyboard=True)
-    await message.answer("Выбери тип DHCP!", reply_markup=markup)
+    await message.answer("Выбери тип DHCP!", reply_markup=all_keyboards.dhcp_navigation())
 
 @dhcp.message(F.text == 'Back')
 async def dhcp_back(message: Message):
-    kb = [
-        [
-            KeyboardButton(text='DHCP'),
-            KeyboardButton(text='DNS'),
-        ]
-    ]
-    markup = ReplyKeyboardMarkup(keyboard=kb, resize_keyboard=True)
-    await message.answer("Вернул назад", reply_markup=markup)
+    await message.answer("Вернул назад", reply_markup=all_keyboards.back())
 
 @dhcp.message(F.text == 'isc-dhcp-server')
 async def dhcp_server(message: Message):
@@ -86,4 +72,4 @@ ip a
 #- пишем эти команды, что бы восстановить процесс назначения адресов и проверяем назначение IP, нашим DHCP
 ```
 """, parse_mode=ParseMode.MARKDOWN)
-    await message.answer("Вот и всё, DHCP настроен.")
+    await message.answer("Вот и всё, DHCP настроен.", reply_markup=all_keyboards.back())
